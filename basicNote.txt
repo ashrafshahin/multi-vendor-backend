@@ -1,0 +1,21 @@
+installation list: npm install
+express 
+mongodb 
+mongoose 
+dotenv 
+jsonwebtoken 
+bcrypt 
+cookie-parser 
+cors 
+
+This lets you use nodemon anywhere in your system: npm install -g nodemon
+only useful in development, production may not work: npm i --save-dev nodemon
+
+=== sparse: true ===
+in userSchema, intentionally we left phone number not required.
+so that multiple user can leave it blank... and it may return Null in the system.. 
+sparse: true, command that 'do not take null as a duplicate value'...
+
+=== select: false ===
+in userSchema, password area. because when we fetch data, 
+password will not come with the data... 
