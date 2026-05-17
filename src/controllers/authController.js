@@ -1,6 +1,10 @@
 const User = require('../models/userSchema');
 const jwt = require('jsonwebtoken')
-const { validationResult } = require('express-validator')
+const { validationResult } = require('express-validator');
+const verificationToken = require('../models/verificationToken');
+const nodemailer = require('nodemailer')
+const { v4: uuidv4 } = require('uuid');
+
 
 exports.register = async (req, res) => {
     try {
@@ -30,6 +34,42 @@ exports.register = async (req, res) => {
         // save user in Database now... both way we can SAVE...
         await user.save()
 
+        // Create verification Token
+        const token = uuidv4()
+        await new verificationToken({ userId: user._id, token }).save();
+
+        // Send Email verification
+        const transporter = nodemailer.createTransport({
+            service: process.env.EMAIL_SERVICE,
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASSWORD,
+            }
+        });
+        // Verification URL Create here...
+        const verificationUrl = `${process.env.APP_URL}/api/v1/auth/verify-email?token=${token}&email=${user.email}`
+
+        const mailOption = {
+            from: `"Shahin Multivendor Shop", <${process.env.EMAIL_USER}>`,
+            to: user.email,
+            subject: "Verify your Email - Shahin Multivendor eCommerce",
+            html: `
+                <h2>Welcome to our Platform</h2>
+                <p>Hey, ${user.name} </p>
+                <p>Thank you for registration, Please verify your email by clicking the link below...</p>
+                <a href=${verificationUrl}>Verify Email</a>
+                <p>This link will be expired in 24 hours</p>
+                <p>Best regards, </br> Team Multivendor...</p>
+            `
+        };
+        try {
+            await transporter.sendMail(mailOption);
+            console.log('Verification email sent...');
+            
+        } catch (error) {
+            console.error('Error sending verification email: ', error)
+        }
+
         // Create new profile of a User -201-Created-
         return res.status(201).json({
             success: true,
@@ -40,8 +80,10 @@ exports.register = async (req, res) => {
                 email: user.email,
                 role: user.role,
                 phone: user.phone,
+                
 
-            }
+            },
+            token
         })
 
     } catch (error) {

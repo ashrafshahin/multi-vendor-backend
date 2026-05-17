@@ -1,0 +1,85 @@
+=== email verification ====
+
+we use mongoose model to create token...
+    - jwt can create the token too..
+    - we did different process...
+
+
+=== need to collect 'app passwords' from gmail account ===
+just google it @xwbfleufpkpxixfx@
+2 step verification is a must
+
+
+=== made the token schema ===
+
+
+== uuid ===
+random ID create kore.. 
+
+
+=== nodemailer ==
+email verification korar jonno akta npm package...
+
+
+test successful :
+in postman 
+{
+    "success": true,
+    "message": "registration successful, Please Login...",
+    "user": {
+        "id": "6a0a25fefda9e09b814b51c8",
+        "name": "shahin khan",
+        "email": "liontechuk@gmail.com",
+        "role": "customer",
+        "phone": "01222333444"
+    },
+    "token": "70353c22-a567-4329-8998-2020707c428b"
+}
+
+
+
+
+
+and database...
+
+_id
+6a0a25fefda9e09b814b51c8
+name
+"shahin khan"
+email
+"liontechuk@gmail.com"
+phone
+"01222333444"
+password
+"$2b$12$nenOsGYMgmAbPCoj0qmHJusV0rDVdn3nnJdutzz7jcv7QafsDztAW"
+role
+"customer"
+isEmailVerified
+false
+
+refreshToken
+Array (empty)
+createdAt
+2026-05-17T20:33:02.369+00:00
+updatedAt
+2026-05-17T20:33:02.369+00:00
+__v
+0
+
+=== verification token e ====
+
+_id
+6a0a25fefda9e09b814b51c9
+userId
+6a0a25fefda9e09b814b51c8
+token
+"70353c22-a567-4329-8998-2020707c428b"
+createdAt
+2026-05-17T20:33:02.810+00:00
+__v
+0
+
+
+
+
+

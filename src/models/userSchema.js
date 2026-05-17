@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Name is required...'],
         trim: true,
-        minLength: 3
+        match: [/^.{5,}$/, 'Name must be at least 5 characters long']
     },
     email: {
         type: String,
@@ -39,18 +39,23 @@ const userSchema = new mongoose.Schema({
         enum: ['customer', 'admin', 'vendor'],
         default: 'customer',
     },
-    isEmailVarified: {
+    isEmailVerified: {
         type: Boolean,
         default: false,
     },
     refreshToken: [{
         token: String,
         createdAt: {
-            type: Date, default: Date.now,
+            type: Date,
+            default: Date.now,
+        },
+        expiresAt: {
+            type: Date,
         },
     }],
     createdAt: {
-        type: Date, default: Date.now
+        type: Date,
+        default: Date.now,
     },
 
 }, { timestamps: true });
@@ -60,7 +65,7 @@ userSchema.pre('save', async function(next) {
     if (!this.isModified('password')) return next(); 
     const salt = await bcrypt.genSalt(12)
     this.password = await bcrypt.hash(this.password, salt);
-    //  return next()
+    // return next()
 });
 
 // compare password...
@@ -81,3 +86,6 @@ module.exports = mongoose.model('User', userSchema)
 // this deye arrow function kaj kore na...
 // pre() mane save er age kichu akta kore save korba...
 // next akta parametre neya hoise...
+
+
+// { timestamps: true } - aita dele auto create and update date and time dai so alada kore likte hobe na ... just expiresAt delai hobe...
