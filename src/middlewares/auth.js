@@ -1,0 +1,40 @@
+const jwt = require('jsonwebtoken')
+
+const protect = async (req, res, next) => {
+    const token,
+
+    if (req.headers.authrization && req.headers.authrization.startWith('Bearer')) {
+        token = req.headers.authrization.split(' ')[1]
+    }
+    // Token na thakle...
+    if (!token) {
+        return res.status(401).json({ message: 'Not Authirized, No Token Found...' })
+    }
+    // Token thakle ...
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+        req.user = decoded
+        next()
+
+    } catch (error) {
+        console.log('Auth Token Middleware Server Error:... ', error)
+        return res.status(401).json({ message: 'Not Authirized, Token Failed...' })
+    }
+};
+
+// Role based 
+const restrictTo = (...roles) => {
+    return (req, res, next) => {
+        if (!roles.includes(req.user.role)) {
+            return res.status(403).json({ message: 'You do not have Permission...' })
+        }
+        next()
+    }
+};
+
+module.exports = { protect, restrictTo }
+
+// notes:
+// protect e check token thik ase ki na...
+// user role check korbe jodi admin thake tahole next() pathabe dashboard e otherwise, 403 error debe...
+// rest operator ...roles use hoyeche karon - sometimes we need to give access to multiple roles like admin and vendor, [in some cases in routes, it will be easy to get all roles]
