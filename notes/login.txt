@@ -37,3 +37,42 @@ userSchema.pre("save", async function(next){
 আরেকটা সঠিক স্টাইল (যদি next ব্যবহার করতেই চাও): async + next() aksathe hobe na...
 
 async function(next) লিখলে Mongoose অনেক সময় next properly pass করে না। তাই next is not a function আসে।
+
+
+==== login error === 
+Login error:...  ValidationError: User validation failed: password: Password must contain at least one letter and one number
+    at model.validate (/Users/Shalhizan/Desktop/backend/multi-vendor-backend/node_modules/mongoose/lib/document.js:2864:36)
+    at async model.$__save (/Users/Shalhizan/Desktop/backend/multi-vendor-backend/node_modules/mongoose/lib/model.js:393:7)
+    at async model.save (/Users/Shalhizan/Desktop/backend/multi-vendor-backend/node_modules/mongoose/lib/model.js:667:5)
+    at async exports.login (/Users/Shalhizan/Desktop/backend/multi-vendor-backend/src/controllers/authController.js:134:9) {
+  errors: {
+    password: ValidatorError: Password must contain at least one letter and one number
+        at SchemaString.doValidate (/Users/Shalhizan/Desktop/backend/multi-vendor-backend/node_modules/mongoose/lib/schemaType.js:1517:13)
+        at model.validate (/Users/Shalhizan/Desktop/backend/multi-vendor-backend/node_modules/mongoose/lib/document.js:2842:20)
+        at async model.$__save (/Users/Shalhizan/Desktop/backend/multi-vendor-backend/node_modules/mongoose/lib/model.js:393:7)
+        at async model.save (/Users/Shalhizan/Desktop/backend/multi-vendor-backend/node_modules/mongoose/lib/model.js:667:5)
+        at async exports.login (/Users/Shalhizan/Desktop/backend/multi-vendor-backend/src/controllers/authController.js:134:9) {
+      properties: [Object],
+      kind: 'regexp',
+      path: 'password',
+      value: '$2b$12$Xe1P2VQhisFhrLlncZebreC...',
+      reason: undefined,
+      Symbol(mongoose#validatorError): true
+    }
+  },
+  _message: 'User validation failed'
+}
+
+=== solution === await user.save() = means save everything... BUT
+
+শুধু token add করছো। name, email, password change করছো না।
+
+তাই: await user.save({ validateBeforeSave:false });
+
+ √ this will give you:
+refresh token save হবে ✅
+password regex validation আর চলবে না ✅
+login error যাবে ✅
+bcrypt change করতে হবে না ✅
+
+তবে এটা শুধু login-এর মতো জায়গায় ব্যবহার করো:

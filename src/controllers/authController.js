@@ -80,8 +80,6 @@ exports.register = async (req, res) => {
                 email: user.email,
                 role: user.role,
                 phone: user.phone,
-
-
             },
             token
         })
@@ -132,8 +130,8 @@ exports.login = async (req, res) => {
             expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         })
 
-        // Save enerything...user e ja ase save...
-        await user.save()
+        // Update only refresh token...[name, email, password will remain the same]
+        await user.save({ validateBeforeSave: false });
 
         // Cookie setup korbo
         res.cookie('refreshToken', refreshToken, {
@@ -162,6 +160,49 @@ exports.login = async (req, res) => {
     } catch (error) {
         console.log('Login error:... ', error)
         return res.status(500).json({ success: false, message: 'Server error...x' })
+    }
+}
+
+exports.refreshToken = async (req, res) => {
+    try {
+        const refreshToken  = req.cookies.refreshToken;
+        if (!refreshToken) {
+            return res.status(401).json({ success: false, message: 'No Refresh Token...' });
+        }
+        // Find User with Refresh Token
+        const user = await User.findOne({
+            refreshTokens: {
+                $elemMatch: {
+                    token: refreshToken,
+                }
+            }
+        });
+        // Refresh token deye user pawa na gele...
+        if (!user) {
+            res.clearCookie('refreshToken');
+            return res.status(403).json({ success: false, message: 'Invalid refresh token...' })
+        };
+
+        // User paise, So Verify refreshToken...Token e problem ase...
+        jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, async (err, decoded) => {
+            if (err) {
+                res.clearCookie('refreshToken');
+                return res.status(403).json({ success: false, message: 'Invalid  or Expired refresh token...' })
+            };
+            const newAccessToken = jwt.sign(
+                { id: user._id, role: user.role, email: user.email },
+                process.env.JWT_ACCESS_SECRET,
+                { expiresIn: process.env.ACCESS_TOKEN_EXPIRY }
+
+            );
+
+            res.status(200).json({ success: true, accessToken: newAccessToken })
+
+        })
+
+    } catch (error) {
+        console.log('Refresh token Server Error:... ', error)
+        return res.status(500).json({ success: false, message: 'Server error' })
     }
 }
 

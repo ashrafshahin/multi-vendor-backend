@@ -1,0 +1,114 @@
+18 may 2026
+register ===
+{
+    "success": true,
+    "message": "registration successful, Please Login...",
+    "user": {
+        "id": "6a0b4066fb509701028cd720",
+        "name": "Shahin Hossein",
+        "email": "liontechuk@gmail.com",
+        "role": "customer",
+        "phone": "01222333444"
+    },
+    "token": "580a91cb-d850-4bd4-b1ca-c0150add0975"
+}
+
+=== db te ===
+_id
+6a0b4066fb509701028cd720
+name
+"Shahin Hossein"
+email
+"liontechuk@gmail.com"
+phone
+"01222333444"
+password
+"$2b$12$V7g8N.Atw07xle8VySeJCOsoEPPkKjtW90HZ/Cjh59te1Em6ZYg4y"
+role
+"customer"
+isEmailVerified
+false
+
+refreshTokens
+Array (empty)
+createdAt
+2026-05-18T16:37:58.569+00:00
+updatedAt
+2026-05-18T16:37:58.569+00:00
+__v
+0
+
+=== xxxx ===
+
+
+login check ---
+{
+    "success": true,
+    "message": "Login successful...",
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMGI0MmNlMDM3NzIyMzdhMjQ2YmUwZiIsInJvbGUiOiJjdXN0b21lciIsImVtYWlsIjoibGlvbnRlY2h1a0BnbWFpbC5jb20iLCJpYXQiOjE3NzkxMjQyMjksImV4cCI6MTc3OTcyOTAyOX0.3CyP7x564vma8lF54fwD-YWedrcDb8umMipG6ZwbXeo",
+    "user": {
+        "id": "6a0b42ce03772237a246be0f",
+        "name": "Shahin Hossein",
+        "email": "liontechuk@gmail.com",
+        "role": "customer",
+        "isEmailVerified": false
+    }
+}
+
+
+== db te after token added with login ===
+_id
+6a0b42ce03772237a246be0f
+name
+"Shahin Hossein"
+email
+"liontechuk@gmail.com"
+phone
+"01222333444"
+password
+"$2b$12$Xe1P2VQhisFhrLlncZebreC83nT8.DEfHsVcuhbtn9QoeDOYCPd9m"
+role
+"customer"
+isEmailVerified
+false
+
+refreshTokens
+Array (2)
+
+0
+Object
+token
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMGI0MmNlMDM3NzIyMzdhM…"
+createdAt
+2026-05-18T17:09:27.880+00:00
+expiresAt
+2026-05-25T17:09:27.880+00:00
+_id
+6a0b47c7e906e55c1832494f
+
+1
+Object
+token
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMGI0MmNlMDM3NzIyMzdhM…"
+createdAt
+2026-05-18T17:10:29.975+00:00
+expiresAt
+2026-05-25T17:10:29.975+00:00
+_id
+6a0b4805db717a8749c6a49d
+createdAt
+2026-05-18T16:48:14.396+00:00
+updatedAt
+2026-05-18T17:10:29.981+00:00
+__v
+2
+
+
+=== refresh token check ==== postman e
+http://localhost:5000/api/v1/auth/refresh-token/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMGI0MmNlMDM3NzIyMzdhMjQ2YmUwZiIsInJvbGUiOiJjdXN0b21lciIsImVtYWlsIjoibGlvbnRlY2h1a0BnbWFpbC5jb20iLCJpYXQiOjE3NzkxMjU2NTIsImV4cCI6MTc3OTczMDQ1Mn0.Ku1BuMT-eoSnBCRssYgQPFL9x4_evqCuHPy-Elk4jIE
+
+result ===
+{
+    "success": true,
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMGI0MmNlMDM3NzIyMzdhMjQ2YmUwZiIsInJvbGUiOiJjdXN0b21lciIsImVtYWlsIjoibGlvbnRlY2h1a0BnbWFpbC5jb20iLCJpYXQiOjE3NzkxMjU3MjUsImV4cCI6MTc3OTczMDUyNX0.ef9JW_jf1ywQqgPD-NqRqFNMEWEUdRIIZemC_SoSyPo"
+}
