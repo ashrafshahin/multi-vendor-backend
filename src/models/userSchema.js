@@ -43,7 +43,7 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    refreshToken: [{
+    refreshTokens: [{
         token: String,
         createdAt: {
             type: Date,
@@ -61,11 +61,10 @@ const userSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 // Password Hash before sending to database...
-userSchema.pre('save', async function(next) {
-    if (!this.isModified('password')) return next(); 
-    const salt = await bcrypt.genSalt(12)
-    this.password = await bcrypt.hash(this.password, salt);
-    // return next()
+userSchema.pre('save', async function() {
+    if (!this.isModified('password')) return; 
+    this.password = await bcrypt.hash(this.password, 12);
+    
 });
 
 // compare password...

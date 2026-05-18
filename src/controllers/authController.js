@@ -65,7 +65,7 @@ exports.register = async (req, res) => {
         try {
             await transporter.sendMail(mailOption);
             console.log('Verification email sent...');
-            
+
         } catch (error) {
             console.error('Error sending verification email: ', error)
         }
@@ -80,7 +80,7 @@ exports.register = async (req, res) => {
                 email: user.email,
                 role: user.role,
                 phone: user.phone,
-                
+
 
             },
             token
@@ -91,4 +91,86 @@ exports.register = async (req, res) => {
         return res.status(500).json({ success: false, message: 'Server error during registration...' })
     }
 };
+
+exports.login = async (req, res) => {
+    try {
+        const { email, password } = req.body
+        // Check no Empty input...
+        if (!email || !password) {
+            return res.status(400).json({ success: false, message: 'Email and Password required...' })
+        };
+
+        // Find user and select password
+        const user = await User.findOne({ email }).select('+password');
+        if (!user) {
+            return res.status(400).json({ success: false, message: 'Invalid Credentials...' })
+        };
+
+        // Password match -bcrypt works- client vs DB password
+        const isMatch = await user.comparePassword(password);
+        if (!isMatch) {
+            return res.status(401).json({ success: false, message: 'Invalid Credentials...' })
+        }
+        // Generate Token -jwt works-
+        const accessToken = jwt.sign(
+            { id: user._id, role: user.role, email: user.email },
+            process.env.JWT_ACCESS_SECRET,
+            { expiresIn: process.env.ACCESS_TOKEN_EXPIRY }
+        );
+
+        // Refresh Token -jwt works-
+        const refreshToken = jwt.sign(
+            { id: user._id },
+            process.env.JWT_REFRESH_SECRET,
+            { expiresIn: process.env.REFRESH_TOKEN_EXPIRY }
+        );
+
+        // Save Refresh Token to user...
+        user.refreshTokens.push({
+            token: refreshToken,
+            createdAt: new Date(),
+            expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        })
+
+        // Save enerything...user e ja ase save...
+        await user.save()
+
+        // Cookie setup korbo
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV == 'production',
+            samSite: 'strict',
+            maxAge: 604800000, // 7 days
+            path: '/',
+
+        })
+
+        res.status(200).json({
+            success: true,
+            message: 'Login successful...',
+            accessToken,
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+                isEmailVerified: user.isEmailVerified,
+
+            }
+        })
+
+    } catch (error) {
+        console.log('Login error:... ', error)
+        return res.status(500).json({ success: false, message: 'Server error...x' })
+    }
+}
+
+
+
+
+
+// Notes:
+// expiresIn:           new Date(Date.now() + 7*24*60*60*1000) = 604800000 milliseconds
+// aivabeo likha jai    new Date(Date.now() + 604800000)
+// meaning ajke theke 7 days add hobe...
 

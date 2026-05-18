@@ -1,0 +1,39 @@
+
+
+=== next() and async conflict giving error ====
+
+// === error ===
+// Login error: TypeError: next is not a function
+//     at model.< anonymous > (/Users/Shalhizan / Desktop / backend / multi - vendor - backend / src / models / userSchema.js: 65: 46)
+//     at Kareem.execPre(/Users/Shalhizan / Desktop / backend / multi - vendor - backend / node_modules / kareem / index.js: 59: 39)
+//     at async model.$__save(/Users/Shalhizan / Desktop / backend / multi - vendor - backend / node_modules / mongoose / lib / model.js: 397: 5)
+//     at async model.save(/Users/Shalhizan / Desktop / backend / multi - vendor - backend / node_modules / mongoose / lib / model.js: 667: 5)
+//     at async exports.login(/Users/Shalhizan / Desktop / backend / multi - vendor - backend / src / controllers / authController.js: 136: 9)
+
+
+// === error ===
+// Login error:...TypeError: user.refreshTokens.push(...).save is not a function
+//     at exports.login(/Users/Shalhizan / Desktop / backend / multi - vendor - backend / src / controllers / authController.js: 133: 12)
+
+
+
+কেন?
+async function নিজেই Promise return করে
+next() দরকার নেই
+শুধু return দিলেই middleware শেষ
+
+=== age jemon chilo ====
+userSchema.pre("save", async function(next){
+    if(!this.isModified("password")){
+        return next();
+    }
+    const salt = await bcrypt.genSalt(12)
+    this.password = await bcrypt.hash(this.password, salt);
+    return next()
+})
+
+======= xxx ====
+
+আরেকটা সঠিক স্টাইল (যদি next ব্যবহার করতেই চাও): async + next() aksathe hobe na...
+
+async function(next) লিখলে Mongoose অনেক সময় next properly pass করে না। তাই next is not a function আসে।
