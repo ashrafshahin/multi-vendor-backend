@@ -8,6 +8,10 @@ const cookieParser = require('cookie-parser')
 const authRoutes = require('./routes/authRoutes')
 const dbConfig = require('./config/dbConfig');
 
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpecs = require('./config/swagger');
+
+
 const app = express()
 
 // middlewares 
@@ -17,6 +21,7 @@ app.use(cors({
     credentials: true,
 }));
 app.use(cookieParser())
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs) )
 
 // Routes 
 app.use('/api/v1/auth', authRoutes)

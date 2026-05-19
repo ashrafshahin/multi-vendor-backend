@@ -1,5 +1,13 @@
 === SWAGGER ==== REST API Documentation Tool | Swagger UI
 
+work steps
+1. npm i swagger-ui-express swagger-jsdoc
+2. swagger.js in [config folder] - to make details specification file...
+3. In App.js - require swaggerUi and that specification file
+4. create routes in app.js er middleware portion e -  for these -  app.use dekho... 
+5. In authRoutes.js middleware e -  Doc likte hobe...
+
+
 https://swagger.io/tools/swagger-ui/
 Swagger UI allows anyone — be it your development team or your end consumers — to visualize and interact with the API’s resources without having any of the implementation logic in place.
 
@@ -29,7 +37,37 @@ https://www.npmjs.com/package/swagger-ui-express
 https://github.com/scottie1984/swagger-ui-express
 
 
-এখানে দুইটা প্যাকেজ আছে, কাজ আলাদা: npm i swagger-ui-express jsdoc
+এখানে দুইটা প্যাকেজ আছে, কাজ আলাদা: npm i swagger-ui-express swagger-jsdoc
 swagger-ui-express → Swagger UI ব্রাউজারে দেখানোর জন্য
 jsdoc → কোডের মন্তব্য (comments) থেকে API documentation তৈরি করার জন্য
 swagger-jsdoc এর কাজ হলো — তোমার কোডের JSDoc comments পড়ে Swagger/OpenAPI specification (JSON object) তৈরি করা।
+
+
+
+=== error ===
+/Users/Shalhizan/Desktop/backend/multi-vendor-backend/node_modules/swagger-jsdoc/src/lib.js:21
+    throw new Error(
+    ^
+
+Error: Missing or invalid input: 'options.swaggerDefinition' or 'options.definition' is required
+    at module.exports (/Users/Shalhizan/Desktop/backend/multi-vendor-backend/node_modules/swagger-jsdoc/src/lib.js:21:11)
+    at Object.<anonymous> (/Users/Shalhizan/Desktop/backend/multi-vendor-backend/src/config/swagger.js:37:23)
+    at Module._compile (node:internal/modules/cjs/loader:1812:14)
+    at Object..js (node:internal/modules/cjs/loader:1943:10)
+    at Module.load (node:internal/modules/cjs/loader:1533:32)
+    at Module._load (node:internal/modules/cjs/loader:1335:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.require (node:internal/modules/cjs/loader:1556:12)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (/Users/Shalhizan/Desktop/backend/multi-vendor-backend/src/app.js:12:22)
+
+Node.js v24.14.0
+[nodemon] app crashed - waiting for file changes before starting...
+
+
+==solution==
+swagger-jsdoc শুধু definition নামটাই খোঁজে। তুমি defination লিখেছো, তাই সে পাচ্ছে না, আর এই error
+
+
+== Test successful ==
+http://localhost:5000/api-docs/

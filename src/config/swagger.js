@@ -2,7 +2,7 @@ const { version } = require('mongoose')
 const swaggerJsdoc = require('swagger-jsdoc')
 
 const options = {
-    defination: {
+    definition: {
         openapi: '3.0.0',
         info: {
             title: 'Multivendor eCommerce API',
@@ -17,7 +17,7 @@ const options = {
             //{  url: `http://ashrafshahin.com`  } real domain use...
             {
                 url: `http://localhost:${process.env.PORT || 5000}`,
-                description: 'Development server use only'
+                description: 'Development server'
             },
 
         ],
