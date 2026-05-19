@@ -85,7 +85,7 @@ exports.register = async (req, res) => {
         })
 
     } catch (error) {
-        console.log(error); // --500-- internal server problem---
+        console.log('Regiater error:...', error); // --500-- internal server problem---
         return res.status(500).json({ success: false, message: 'Server error during registration...' })
     }
 };
@@ -165,7 +165,7 @@ exports.login = async (req, res) => {
 
 exports.refreshToken = async (req, res) => {
     try {
-        const refreshToken  = req.cookies.refreshToken;
+        const refreshToken = req.cookies.refreshToken;
         if (!refreshToken) {
             return res.status(401).json({ success: false, message: 'No Refresh Token...' });
         }
