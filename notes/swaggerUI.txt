@@ -1,0 +1,35 @@
+=== SWAGGER ==== REST API Documentation Tool | Swagger UI
+
+https://swagger.io/tools/swagger-ui/
+Swagger UI allows anyone — be it your development team or your end consumers — to visualize and interact with the API’s resources without having any of the implementation logic in place.
+
+Swagger UI API-এর ভেতরের কোড না দেখেও API কী কী করতে পারে সেটা দেখা এবং ব্যবহার/টেস্ট করার সুযোগ দেয়। এটার কাজ কী?
+
+১. API documentation দেখানো
+API-এর সব endpoint, parameter, response এক জায়গায় দেখায়।
+
+২. API test করা
+Postman ছাড়াই ব্রাউজার থেকে “Try it out” চাপ দিয়ে API call করা যায়।
+
+৩. Frontend ও Backend টিমের কাজ সহজ করা
+Backend API তৈরি শেষ না হলেও structure দেখে frontend কাজ শুরু করতে পারে।
+
+৪. API বোঝা সহজ করা
+API কী input চায়, কী output দেয় — সব পরিষ্কার থাকে।
+
+৫. Manual testing সহজ করা
+Developer বা client API কাজ করছে কিনা দ্রুত পরীক্ষা করতে পারে।
+
+swagger-jsdoc এর কাজ হলো — 
+তোমার কোডের JSDoc comments পড়ে Swagger/OpenAPI specification (JSON object) তৈরি করা।
+
+INSTALLATION:
+https://www.npmjs.com/package/swagger-ui-express
+
+https://github.com/scottie1984/swagger-ui-express
+
+
+এখানে দুইটা প্যাকেজ আছে, কাজ আলাদা: npm i swagger-ui-express jsdoc
+swagger-ui-express → Swagger UI ব্রাউজারে দেখানোর জন্য
+jsdoc → কোডের মন্তব্য (comments) থেকে API documentation তৈরি করার জন্য
+swagger-jsdoc এর কাজ হলো — তোমার কোডের JSDoc comments পড়ে Swagger/OpenAPI specification (JSON object) তৈরি করা।
